@@ -336,7 +336,14 @@ public class Main {
                             int u = (int) ((w0 * vertUVs[0][0] + w1 * vertUVs[1][0] + w2 * vertUVs[2][0]) * woodTexture.getWidth());
                             int v = (int) ((w0 * vertUVs[0][1] + w1 * vertUVs[1][1] + w2 * vertUVs[2][1]) * woodTexture.getHeight());
 
-                            int color = woodTexture.getRGB(u,v);
+                            if (u >= woodTexture.getWidth()) {
+                                u = woodTexture.getWidth() - 1;
+                            }
+                            if (v >= woodTexture.getHeight()) {
+                                v = woodTexture.getHeight() - 1;
+                            }
+
+                            int color = woodTexture.getRGB(u, v);
 
                             imageArr[index] = 0xff000000 | color;
                         }
