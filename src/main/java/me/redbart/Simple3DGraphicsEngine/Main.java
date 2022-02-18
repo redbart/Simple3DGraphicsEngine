@@ -16,7 +16,89 @@ public class Main {
         double[] triVerticies = new double[]{
                 -0.5, -0.5, -5.0,
                 0.5, -0.5, -5.0,
-                0.0, 0.5, -5.0
+                -0.5, 0.5, -5.0,
+                0.5, 0.5, -5.0,
+                -0.5, 0.5, -5.0,
+                0.5, -0.5, -5.0,
+
+                0.5, 0.5, -5.0,
+                0.5, -0.5, -5.0,
+                0.5, 0.5, -6.0,
+                0.5, 0.5, -6.0,
+                0.5, -0.5, -5.0,
+                0.5, -0.5, -6.0,
+
+                -0.5, -0.5, -6.0,
+                -0.5, 0.5, -6.0,
+                0.5, -0.5, -6.0,
+                0.5, 0.5, -6.0,
+                0.5, -0.5, -6.0,
+                -0.5, 0.5, -6.0,
+
+                -0.5, 0.5, -6.0,
+                -0.5, -0.5, -5.0,
+                -0.5, 0.5, -5.0,
+                -0.5, 0.5, -6.0,
+                -0.5, -0.5, -6.0,
+                -0.5, -0.5, -5.0,
+
+                -0.5, 0.5, -5.0,
+                0.5, 0.5, -5.0,
+                -0.5, 0.5, -6.0,
+                -0.5, 0.5, -6.0,
+                0.5, 0.5, -5.0,
+                0.5, 0.5, -6.0,
+
+                0.5, -0.5, -5.0,
+                -0.5, -0.5, -5.0,
+                -0.5, -0.5, -6.0,
+                0.5, -0.5, -6.0,
+                0.5, -0.5, -5.0,
+                -0.5, -0.5, -6.0,
+        };
+
+        double[] triUVs = new double[]{
+                0.0, 0.0,
+                1.0, 0.0,
+                0.0, 1.0,
+                1.0, 1.0,
+                0.0, 1.0,
+                1.0, 0.0,
+
+                0.0, 1.0,
+                0.0, 0.0,
+                1.0, 1.0,
+                1.0, 1.0,
+                0.0, 0.0,
+                1.0, 0.0,
+
+                1.0, 0.0,
+                1.0, 1.0,
+                0.0, 0.0,
+                0.0, 1.0,
+                0.0, 0.0,
+                1.0, 1.0,
+
+                0.0, 1.0,
+                1.0, 0.0,
+                1.0, 1.0,
+                0.0, 1.0,
+                0.0, 0.0,
+                1.0, 0.0,
+
+                0.0, 0.0,
+                1.0, 0.0,
+                0.0, 1.0,
+                0.0, 1.0,
+                1.0, 0.0,
+                1.0, 1.0,
+
+                1.0, 1.0,
+                0.0, 1.0,
+                0.0, 0.0,
+                1.0, 0.0,
+                1.0, 1.0,
+                0.0, 0.0,
         };
         boolean[] pressedKeys = new boolean[256];
 
@@ -109,7 +191,7 @@ public class Main {
             camY += moveY;
             camZ += moveZ;
 
-            System.out.println(camX + " " + camY + " " + camZ);
+            System.out.println("Camera: " + camX + " " + camY + " " + camZ);
 
             if (pressedKeys[KeyEvent.VK_Q]) {
                 camYaw -= deltaTime * 0.5;
@@ -166,29 +248,104 @@ public class Main {
                 screenY = localY / -localZ * nearClip;
                 screenZ = -localZ;
 
-                if (screenX >= -canvasSize / 2 && screenX <= canvasSize / 2 && screenY >= -canvasSize / 2 && screenY <= canvasSize / 2) {
-                    double ndcX, ndcY, ndcZ;
-                    ndcX = (screenX + (canvasSize / 2)) / canvasSize;
-                    ndcY = (screenY + (canvasSize / 2)) / canvasSize;
-                    ndcZ = (screenZ - nearClip) / (farClip - nearClip);
+                double ndcX, ndcY, ndcZ;
+                ndcX = (screenX + (canvasSize / 2)) / canvasSize;
+                ndcY = (screenY + (canvasSize / 2)) / canvasSize;
+                ndcZ = (screenZ - nearClip) / (farClip - nearClip);
 
-                    double rasterX, rasterY;
-                    rasterX = ndcX * width;
-                    rasterY = (1 - ndcY) * height;
+                double rasterX, rasterY;
+                rasterX = ndcX * width;
+                rasterY = (1 - ndcY) * height;
 
-                    projectedVerticies[vert * 3] = rasterX;
-                    projectedVerticies[vert * 3 + 1] = rasterY;
-                    projectedVerticies[vert * 3 + 2] = ndcZ;
+                projectedVerticies[vert * 3] = rasterX;
+                projectedVerticies[vert * 3 + 1] = rasterY;
+                projectedVerticies[vert * 3 + 2] = ndcZ;
 
-                    for (int dy = -5; dy <= 5; dy++) {
-                        for (int dx = -5; dx <= 5; dx++) {
-                            int index = ((int) rasterY + dy) * width + ((int) rasterX + dx);
-                            if (index >= 0 && index < imageArr.length) {
-                                imageArr[index] = 0xff000000;
-                            }
+//                for (int dy = -5; dy <= 5; dy++) {
+//                    for (int dx = -5; dx <= 5; dx++) {
+//                        if (rasterY + dy >= 0 && rasterY + dy < height && rasterX + dx >= 0 && rasterX + dx < width) {
+//                            int index = ((int) rasterY + dy) * width + ((int) rasterX + dx);
+//                            if (index >= 0 && index < imageArr.length) {
+//                                imageArr[index] = 0xff000000;
+//                            }
+//                        }
+//                    }
+//                }
+            }
+
+            // Fragment "shader"
+            for (int tri = 0; tri < projectedVerticies.length / 9; tri++) {
+                double[][] verticies = new double[3][3];
+
+                for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 3; j++) {
+                        verticies[i][j] = projectedVerticies[tri * 9 + i * 3 + j];
+                    }
+                }
+
+                double[][] vertUVs = new double[3][2];
+
+                for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 2; j++) {
+                        vertUVs[i][j] = triUVs[tri * 6 + i * 2 + j];
+                    }
+                }
+
+                double xLeftBound = width;
+                double xRightBound = 0;
+                double yLeftBound = height;
+                double yRightBound = 0;
+
+                for (int i = 0; i < 3; i++) {
+                    if (verticies[i][0] < xLeftBound) {
+                        xLeftBound = verticies[i][0];
+                    }
+                    if (verticies[i][0] > xRightBound) {
+                        xRightBound = verticies[i][0];
+                    }
+                    if (verticies[i][1] < yLeftBound) {
+                        yLeftBound = verticies[i][1];
+                    }
+                    if (verticies[i][1] > yRightBound) {
+                        yRightBound = verticies[i][1];
+                    }
+                }
+
+                if (xLeftBound < 0) {
+                    xLeftBound = 0;
+                }
+                if (xRightBound >= width) {
+                    xRightBound = width - 1;
+                }
+                if (yLeftBound < 0) {
+                    yLeftBound = 0;
+                }
+                if (yRightBound >= height) {
+                    yRightBound = height - 1;
+                }
+
+                double doubleArea = (verticies[2][0] - verticies[0][0]) * (verticies[1][1] - verticies[0][1]) - (verticies[2][1] - verticies[0][1]) * (verticies[1][0] - verticies[0][0]);
+                for (double pixelY = Math.floor(yLeftBound); pixelY <= Math.ceil(yRightBound); pixelY++) {
+                    for (double pixelX = Math.floor(xLeftBound); pixelX <= Math.ceil(xRightBound); pixelX++) {
+                        int index = ((int) pixelY) * width + ((int) pixelX);
+                        //Use edge function to find if pixel is in triangle
+                        double w0 = (pixelX - verticies[1][0]) * (verticies[2][1] - verticies[1][1]) - (pixelY - verticies[1][1]) * (verticies[2][0] - verticies[1][0]);
+                        double w1 = (pixelX - verticies[2][0]) * (verticies[0][1] - verticies[2][1]) - (pixelY - verticies[2][1]) * (verticies[0][0] - verticies[2][0]);
+                        double w2 = (pixelX - verticies[0][0]) * (verticies[1][1] - verticies[0][1]) - (pixelY - verticies[0][1]) * (verticies[1][0] - verticies[0][0]);
+                        if (w0 >= 0 && w1 >= 0 && w2 >= 0) {
+                            w0 /= doubleArea;
+                            w1 /= doubleArea;
+                            w2 /= doubleArea;
+
+                            int red = (int) ((w0 * vertUVs[0][0] + w1 * vertUVs[1][0] + w2 * vertUVs[2][0]) * 0xff);
+                            int blue = (int) ((w0 * vertUVs[0][1] + w1 * vertUVs[1][1] + w2 * vertUVs[2][1]) * 0xff);
+
+                            imageArr[index] = 0xff000000 | (red << 16) | (blue);
+                            //imageArr[index] = 0xff000000;
+                        } else {
+                            //imageArr[index] = 0xffffffff;
                         }
                     }
-
                 }
             }
 
