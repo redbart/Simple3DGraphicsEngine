@@ -267,17 +267,6 @@ public class Main {
                 projectedVerticies[vert * 3] = rasterX;
                 projectedVerticies[vert * 3 + 1] = rasterY;
                 projectedVerticies[vert * 3 + 2] = ndcZ;
-
-//                for (int dy = -5; dy <= 5; dy++) {
-//                    for (int dx = -5; dx <= 5; dx++) {
-//                        if (rasterY + dy >= 0 && rasterY + dy < height && rasterX + dx >= 0 && rasterX + dx < width) {
-//                            int index = ((int) rasterY + dy) * width + ((int) rasterX + dx);
-//                            if (index >= 0 && index < imageArr.length) {
-//                                imageArr[index] = 0xff000000;
-//                            }
-//                        }
-//                    }
-//                }
             }
 
             // Fragment "shader"
@@ -344,18 +333,12 @@ public class Main {
                             w1 /= doubleArea;
                             w2 /= doubleArea;
 
-//                            int red = (int) ((w0 * vertUVs[0][0] + w1 * vertUVs[1][0] + w2 * vertUVs[2][0]) * 0xff);
-//                            int blue = (int) ((w0 * vertUVs[0][1] + w1 * vertUVs[1][1] + w2 * vertUVs[2][1]) * 0xff);
-
                             int u = (int) ((w0 * vertUVs[0][0] + w1 * vertUVs[1][0] + w2 * vertUVs[2][0]) * woodTexture.getWidth());
                             int v = (int) ((w0 * vertUVs[0][1] + w1 * vertUVs[1][1] + w2 * vertUVs[2][1]) * woodTexture.getHeight());
 
                             int color = woodTexture.getRGB(u,v);
 
                             imageArr[index] = 0xff000000 | color;
-                            //imageArr[index] = 0xff000000;
-                        } else {
-                            //imageArr[index] = 0xffffffff;
                         }
                     }
                 }
