@@ -1,5 +1,6 @@
 package me.redbart.Simple3DGraphicsEngine;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -7,6 +8,8 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.io.IOException;
+import java.net.URL;
 
 public class Main {
     public static void main(String[] args) {
@@ -112,6 +115,12 @@ public class Main {
         double nearClip = 0.1;
         double farClip = 100;
         double fov = Math.toRadians(70);
+        BufferedImage woodTexture = null;
+        try {
+            woodTexture = ImageIO.read(new URL("https://www.myfreetextures.com/wp-content/uploads/2014/10/seamless-wood-background-1.jpg"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         BufferedImage frameImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
@@ -190,8 +199,6 @@ public class Main {
             camX += moveX;
             camY += moveY;
             camZ += moveZ;
-
-            System.out.println("Camera: " + camX + " " + camY + " " + camZ);
 
             if (pressedKeys[KeyEvent.VK_Q]) {
                 camYaw -= deltaTime * 0.5;
@@ -337,10 +344,15 @@ public class Main {
                             w1 /= doubleArea;
                             w2 /= doubleArea;
 
-                            int red = (int) ((w0 * vertUVs[0][0] + w1 * vertUVs[1][0] + w2 * vertUVs[2][0]) * 0xff);
-                            int blue = (int) ((w0 * vertUVs[0][1] + w1 * vertUVs[1][1] + w2 * vertUVs[2][1]) * 0xff);
+//                            int red = (int) ((w0 * vertUVs[0][0] + w1 * vertUVs[1][0] + w2 * vertUVs[2][0]) * 0xff);
+//                            int blue = (int) ((w0 * vertUVs[0][1] + w1 * vertUVs[1][1] + w2 * vertUVs[2][1]) * 0xff);
 
-                            imageArr[index] = 0xff000000 | (red << 16) | (blue);
+                            int u = (int) ((w0 * vertUVs[0][0] + w1 * vertUVs[1][0] + w2 * vertUVs[2][0]) * woodTexture.getWidth());
+                            int v = (int) ((w0 * vertUVs[0][1] + w1 * vertUVs[1][1] + w2 * vertUVs[2][1]) * woodTexture.getHeight());
+
+                            int color = woodTexture.getRGB(u,v);
+
+                            imageArr[index] = 0xff000000 | color;
                             //imageArr[index] = 0xff000000;
                         } else {
                             //imageArr[index] = 0xffffffff;
