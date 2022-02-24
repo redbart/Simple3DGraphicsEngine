@@ -9,7 +9,6 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.io.IOException;
-import java.net.URL;
 
 public class Main {
     public static void main(String[] args) {
@@ -117,7 +116,8 @@ public class Main {
         double fov = Math.toRadians(70);
         BufferedImage woodTexture = null;
         try {
-            woodTexture = ImageIO.read(new URL("https://www.myfreetextures.com/wp-content/uploads/2014/10/seamless-wood-background-1.jpg"));
+            // Load texture from https://www.myfreetextures.com/wp-content/uploads/2014/10/seamless-wood-background-1.jpg
+            woodTexture = ImageIO.read(Main.class.getResource("seamless-wood-background-1.jpg"));
         } catch (IOException e) {
             e.printStackTrace();
         }
